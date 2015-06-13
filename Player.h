@@ -14,6 +14,7 @@ class Player
 public:
 
 	D3DXVECTOR3 pos;
+	D3DXVECTOR3 accel;
 	float vy;
 	float angleY;
 	vtx::Mesh *mesh;

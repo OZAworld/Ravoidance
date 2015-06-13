@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 #include "vtx.h"
 #include "Player.h"
 #include "Ball.h"
@@ -50,7 +51,7 @@ void Player::Draw(BallAdmin *ball)
 
 		if (input->gamepad->RT() > 0.5f)
 		{
-			ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 0.5f);
+			ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 0.5f, 100);
 		}
 	}
 	else
@@ -68,10 +69,82 @@ void Player::Draw(BallAdmin *ball)
 
 		angleY = atan2(input->mouse->GetY() - app->wnd->GetRectClient().bottom / 2, input->mouse->GetX() - app->wnd->GetRectClient().right / 2);
 
-		if ((input->mouse->GetButton(0)))
+		static bool flag = false;
+		static bool exist = false;
+
+		if ((input->mouse->GetButton(0)) && flag == false)
 		{
-			ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 0.5f);
+			exist = true;
 		}
+		if (exist == true)
+		{
+			static int c = 0;
+			c++;
+			if (c < 21)
+			{
+				flag = true;
+				D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5, rand() % 5, rand() % 5));
+				ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.1f), accel.y * 0.1f, sin(-angleY) + (accel.z * 0.1f)) * 0.3f, 100);
+			}
+			if (c > 41)
+			{
+				flag = false;
+				exist = false;
+				c = 0;
+			}
+		}
+		static bool flag2 = false;
+		static bool exist2 = false;
+
+		if ((input->mouse->GetButton(1)) && flag2 == false)
+		{
+			exist2 = true;
+		}
+		if (exist2 == true)
+		{
+			static int c = 0;
+			c++;
+			if (c < 21)
+			{
+				flag2 = true;
+				D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5 - 2, rand() % 5 - 2, rand() % 5 - 2));
+				ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.5f), accel.y * 0.5f, sin(-angleY) + (accel.z * 0.5f)) * 0.3f, 20);
+			}
+			if (c > 231)
+			{
+				flag2 = false;
+				exist2 = false;
+				c = 0;
+			}
+		}
+
+		static bool flag3 = false;
+		static bool exist3 = false;
+		static int d = 0;
+
+		if (GetAsyncKeyState(VK_RETURN) && flag3 == false)
+		{
+			exist3 = true;
+			srand((unsigned int)time(NULL));
+		}
+		if (exist3 == true)
+		{
+			static int c = 0;
+			c++;
+			if (c < 6)
+			{
+				flag3 = true;
+				D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5 - 2, rand() % 5 - 2, rand() % 5 - 2));
+				ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY), accel.y * 0.1f, sin(-angleY)) * 0.6f, 20);
+			}
+			if (c > 48)
+			{
+				flag3 = false;
+				exist3 = false;
+				c = 0;
+			}
+		}
+
 	}
 
 	pos.y += vy -= 0.01f;

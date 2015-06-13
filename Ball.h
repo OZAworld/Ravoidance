@@ -39,7 +39,7 @@ public:
 
 	~BallAdmin();
 
-	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 vec);
+	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 vec, int Num);
 
 	void Draw(Player &player);
 

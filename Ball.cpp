@@ -24,7 +24,7 @@ Ball::~Ball()
 void Ball::Update(Player &player, std::vector<Ball> ball, int index)
 {
 	vec *= 0.99f;
-	vec.y -= 0.005f;
+	vec.y -= 0.0005f;
 
 	pos += vec;
 
@@ -106,10 +106,10 @@ BallAdmin::~BallAdmin()
 	delete[] mesh;
 }
 
-void BallAdmin::Set(D3DXVECTOR3 pos, D3DXVECTOR3 vec)
+void BallAdmin::Set(D3DXVECTOR3 pos, D3DXVECTOR3 vec, int Num)
 {
 	ball.push_back(Ball(pos, vec));
-	if (ball.size() > 100)
+	if (ball.size() > Num)
 		ball.erase(ball.begin() + 0);
 }
 
