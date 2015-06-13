@@ -80,13 +80,16 @@ void Player::Draw(BallAdmin *ball)
 		{
 			static int c = 0;
 			c++;
-			if (c < 21)
+			if (c < 126)
 			{
 				flag = true;
 				D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5, rand() % 5, rand() % 5));
-				ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.1f), accel.y * 0.1f, sin(-angleY) + (accel.z * 0.1f)) * 0.3f, 100);
+				if (c % 6 == 0)
+				{
+					ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.1f), accel.y * 0.1f, sin(-angleY) + (accel.z * 0.1f)) * 0.3f, 100);
+				}
 			}
-			if (c > 41)
+			if (c > 246)
 			{
 				flag = false;
 				exist = false;
@@ -131,13 +134,16 @@ void Player::Draw(BallAdmin *ball)
 		{
 			static int c = 0;
 			c++;
-			if (c < 6)
+			if (c < 180)
 			{
 				flag3 = true;
 				D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5 - 2, rand() % 5 - 2, rand() % 5 - 2));
-				ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY), accel.y * 0.1f, sin(-angleY)) * 0.6f, 20);
+				if (c % 30 == 0)
+				{
+					ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY), accel.y * 0.1f, sin(-angleY)) * 0.6f, 20);
+				}
 			}
-			if (c > 48)
+			if (c > 360)
 			{
 				flag3 = false;
 				exist3 = false;
