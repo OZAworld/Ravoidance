@@ -19,6 +19,8 @@ public:
 	float angleY;
 	vtx::Mesh *mesh;
 	vtx::Texture *texture;
+	PlayerType _PT;
+
 
 	Player();
 

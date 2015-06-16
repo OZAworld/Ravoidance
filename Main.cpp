@@ -1,5 +1,6 @@
 #include "vtx.h"
 #include "Player.h"
+#include "2Player.h"
 #include "Ball.h"
 #include "Stage.h"
 using std::unique_ptr;
@@ -14,6 +15,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	unique_ptr<Player> player(new Player(D3DXVECTOR3(-5, -4.5, 0), 0));
 	player->texture[0].Load(_T("Texture/Red.png"));
 	player->texture[1].Load(_T("Texture/Shadow.png"));
+	unique_ptr<Player2> player2(new Player2(D3DXVECTOR3(0, -4.5, 5), 0));
+	player2->texture[0].Load(_T("Texture/Blue.png"));
+	player2->texture[1].Load(_T("Texture/Shadow.png"));
 	unique_ptr<BallAdmin> ball(new BallAdmin());
 
 	while (app->wnd->MessageLoop())
@@ -25,7 +29,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		player->Draw(ball.get());
 
+		player2->Draw(ball.get());
+
 		ball->Draw(*player);
+
+		ball->Draw_B(*player2);
 
 		render->End();
 	}

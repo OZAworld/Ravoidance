@@ -3,6 +3,7 @@
 class vtx::Mesh;
 class vtx::Texture;
 class Player;
+class Player2;
 
 class Ball
 {
@@ -20,6 +21,8 @@ public:
 	~Ball();
 
 	void Update(Player &player, std::vector<Ball> ball, int index);
+
+	void Update_B(Player2 &player2, std::vector<Ball> ball, int index);
 
 	void Draw(vtx::Mesh *ballMesh, vtx::Texture *ballTexture, vtx::Mesh *shadowMesh, vtx::Texture *shadowTexture);
 
@@ -42,5 +45,7 @@ public:
 	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 vec, int Num);
 
 	void Draw(Player &player);
+
+	void Draw_B(Player2 &player2);
 
 };

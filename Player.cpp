@@ -10,10 +10,13 @@ Player::Player()
 	pos = D3DXVECTOR3(0, 0, 0);
 	vy = 0;
 	angleY = 0;
-	mesh = new Mesh[2];
+	mesh = new Mesh[4];
 	mesh[0].Load(_T("Mesh/Ball.x"));
 	mesh[1].Load(_T("Mesh/Shadow.x"));
+	mesh[2].Load(_T("Mesh/cube.x"));
+	mesh[3].Load(_T("Mesh/ocutan.x"));
 	texture = new Texture[2];
+	_PT = キューブ;
 }
 
 Player::Player(D3DXVECTOR3 &pos, float angleY)
@@ -21,10 +24,14 @@ Player::Player(D3DXVECTOR3 &pos, float angleY)
 	Player::pos = pos;
 	Player::vy = 0;
 	Player::angleY = angleY;
-	mesh = new Mesh[2];
+	mesh = new Mesh[4];
 	mesh[0].Load(_T("Mesh/Ball.x"));
 	mesh[1].Load(_T("Mesh/Shadow.x"));
+	mesh[2].Load(_T("Mesh/cube.x"));
+	mesh[3].Load(_T("Mesh/ocutan.x"));
 	texture = new Texture[2];
+	_PT = キューブ;
+
 }
 
 Player::~Player()
@@ -49,9 +56,57 @@ void Player::Draw(BallAdmin *ball)
 		//angleY = atan2(-input->gamepad->RS().y, input->gamepad->RS().x);
 		angleY += floor(input->gamepad->RS().x * 2) * 0.01f;
 
-		if (input->gamepad->RT() > 0.5f)
+		static bool flag = false;
+		static bool exist = false;
+
+		if (input->gamepad->RT() > 0.5f && flag == false)
 		{
-			ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 0.5f, 100);
+			exist = true;
+		}
+			if (exist == true)
+			{
+				static int c = 0;
+				c++;
+				if (c < 126)
+				{
+					flag = true;
+					D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5, rand() % 5, rand() % 5));
+					if (c % 6 == 0)
+					{
+						ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.1f), accel.y * 0.1f, sin(-angleY) + (accel.z * 0.1f)) * 0.3f, 100);
+					}
+				}
+				if (c > 246)
+				{
+					flag = false;
+					exist = false;
+					c = 0;
+				}
+			}
+		}
+
+	static bool flag2 = false;
+	static bool exist2 = false;
+
+	if (input->gamepad->GetDown(XINPUT_GAMEPAD_A) && flag2 == false)
+	{
+		exist2 = true;
+	}
+	if (exist2 == true)
+	{
+		static int c = 0;
+		c++;
+		if (c < 21)
+		{
+			flag2 = true;
+			D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5 - 2, rand() % 5 - 2, rand() % 5 - 2));
+			ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.5f), accel.y * 0.5f, sin(-angleY) + (accel.z * 0.5f)) * 0.3f, 20);
+		}
+		if (c > 231)
+		{
+			flag2 = false;
+			exist2 = false;
+			c = 0;
 		}
 	}
 	else
@@ -140,7 +195,7 @@ void Player::Draw(BallAdmin *ball)
 				D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5 - 2, rand() % 5 - 2, rand() % 5 - 2));
 				if (c % 30 == 0)
 				{
-					ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY), accel.y * 0.1f, sin(-angleY)) * 0.6f, 20);
+					ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY), accel.y * 0.1f, sin(-angleY)) * 1.2f, 20);
 				}
 			}
 			if (c > 360)
@@ -168,7 +223,29 @@ void Player::Draw(BallAdmin *ball)
 	if (pos.z < -7.0f)
 		pos.z = -7.0f;
 
-	mesh[0].Draw(&pos, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(1, 1, 1), texture[0].Get());
+
+	if (GetAsyncKeyState(0x31))
+		_PT = キューブ;
+
+	if (GetAsyncKeyState(0x32))
+		_PT = オクタン;
+
+	if (GetAsyncKeyState(0x33))
+		_PT = スフィア;
+
+
+	switch (_PT)
+	{
+	case キューブ:
+		mesh[0].Draw(&pos, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(1, 1, 1), texture[0].Get());
+		break;
+	case オクタン:
+		mesh[2].Draw(&pos, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(1, 1, 1), texture[0].Get());
+		break;
+	case スフィア:
+		mesh[3].Draw(&pos, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(1, 1, 1), texture[0].Get());
+		break;
+	}
 	mesh[1].Draw(&D3DXVECTOR3(pos.x, -5, pos.z), &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0.75f, 0.75f, 0.75f), texture[1].Get());
 
 	D3DXVECTOR3 laserPointer = pos;

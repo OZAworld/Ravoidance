@@ -72,6 +72,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="2Player.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -84,6 +85,7 @@
     <ClCompile Include="vtx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="2Player.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Input.h" />

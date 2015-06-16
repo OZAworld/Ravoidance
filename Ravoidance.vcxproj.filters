@@ -41,6 +41,9 @@
     <ClCompile Include="Stage.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="2Player.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -68,6 +71,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Stage.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="2Player.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
