@@ -1,7 +1,7 @@
 #pragma once
 
 extern class BallAdmin;
-
+class Player;
 
 class Player2
 {
@@ -9,6 +9,7 @@ public:
 
 	D3DXVECTOR3 pos;
 	D3DXVECTOR3 accel;
+	D3DXVECTOR3 vec;
 	float vy;
 	float angleY;
 	vtx::Mesh *mesh;
@@ -20,6 +21,7 @@ public:
 
 	~Player2();
 
-	void Draw(BallAdmin *ball);
+	void Draw(BallAdmin *ball_2);
 
+	void Hit(Player &player);
 };

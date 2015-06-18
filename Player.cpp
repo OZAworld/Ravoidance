@@ -2,6 +2,7 @@
 #include <time.h>
 #include "vtx.h"
 #include "Player.h"
+#include "2Player.h"
 #include "Ball.h"
 using namespace vtx;
 
@@ -40,12 +41,12 @@ Player::~Player()
 	delete[] mesh;
 }
 
-void Player::Draw(BallAdmin *ball)
+void Player::Draw(BallAdmin *ball_1)
 {
 	if (input->gamepad->Enable(1))
 	{
-		pos.x += floor(input->gamepad->LS().x * 2) * 0.1f;
-		pos.z += floor(input->gamepad->LS().y * 2) * 0.1f;
+		pos.x += floor(input->gamepad->LS().x * 2) * 0.1f + vec.x;
+		pos.z += floor(input->gamepad->LS().y * 2) * 0.1f + vec.z;
 
 		std::cout << floor(input->gamepad->LS().x * 2) * 0.1f << std::endl;
 		std::cout << floor(input->gamepad->LS().y * 2) * 0.1f << std::endl;
@@ -56,57 +57,69 @@ void Player::Draw(BallAdmin *ball)
 		//angleY = atan2(-input->gamepad->RS().y, input->gamepad->RS().x);
 		angleY += floor(input->gamepad->RS().x * 2) * 0.01f;
 
+		//-----------------------------------------------------------------------------
+		//	マシンガンの処理
+		//-----------------------------------------------------------------------------
 		static bool flag = false;
 		static bool exist = false;
+		static int c = 0;
+		static float d = 0;
+		c++;
 
-		if (input->gamepad->RT() > 0.5f && flag == false)
+		if (input->gamepad->RT() > 0.5f && flag == false&& c % 6 == 0)
 		{
 			exist = true;
+			d++;
+			std::cout << "%d" << d << std::endl;
 		}
-			if (exist == true)
+		else
+		{
+			exist = false;
+		}
+		if (exist == true && d < 21)
+		{
+			D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5, rand() % 5, rand() % 5));
+			ball_1->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.1f), accel.y * 0.1f, sin(-angleY) + (accel.z * 0.1f)) * 0.3f, 40);
+		}
+		if (d > 21)
+		{
+			flag = true;
+		}
+		if (flag == true)
+		{
+			d -= 0.17f;
+		}
+		if (d < 0)
+		{
+			flag = false;
+		}
+
+		//-----------------------------------------------------------------------------
+		//	ショットガンの処理
+		//-----------------------------------------------------------------------------
+		static bool flag2 = false;
+		static bool exist2 = false;
+
+		if (input->gamepad->GetDown(XINPUT_GAMEPAD_A)) //&& flag2 == false)
+		{
+			exist2 = true;
+		}
+		if (exist2 == true)
+		{
+			static int c = 0;
+			c++;
+			if (c < 21)
 			{
-				static int c = 0;
-				c++;
-				if (c < 126)
-				{
-					flag = true;
-					D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5, rand() % 5, rand() % 5));
-					if (c % 6 == 0)
-					{
-						ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.1f), accel.y * 0.1f, sin(-angleY) + (accel.z * 0.1f)) * 0.3f, 100);
-					}
-				}
-				if (c > 246)
-				{
-					flag = false;
-					exist = false;
-					c = 0;
-				}
+				flag2 = true;
+				D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5 - 2, rand() % 5 - 2, rand() % 5 - 2));
+				ball_1->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.5f), accel.y * 0.5f, sin(-angleY) + (accel.z * 0.5f)) * 0.3f, 40);
 			}
-		}
-
-	static bool flag2 = false;
-	static bool exist2 = false;
-
-	if (input->gamepad->GetDown(XINPUT_GAMEPAD_A) && flag2 == false)
-	{
-		exist2 = true;
-	}
-	if (exist2 == true)
-	{
-		static int c = 0;
-		c++;
-		if (c < 21)
-		{
-			flag2 = true;
-			D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5 - 2, rand() % 5 - 2, rand() % 5 - 2));
-			ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.5f), accel.y * 0.5f, sin(-angleY) + (accel.z * 0.5f)) * 0.3f, 20);
-		}
-		if (c > 231)
-		{
-			flag2 = false;
-			exist2 = false;
-			c = 0;
+			if (c > 231)
+			{
+				flag2 = false;
+				exist2 = false;
+				c = 0;
+			}
 		}
 	}
 	else
@@ -141,7 +154,7 @@ void Player::Draw(BallAdmin *ball)
 				D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5, rand() % 5, rand() % 5));
 				if (c % 6 == 0)
 				{
-					ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.1f), accel.y * 0.1f, sin(-angleY) + (accel.z * 0.1f)) * 0.3f, 100);
+					ball_1->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.1f), accel.y * 0.1f, sin(-angleY) + (accel.z * 0.1f)) * 0.3f, 40);
 				}
 			}
 			if (c > 246)
@@ -166,7 +179,7 @@ void Player::Draw(BallAdmin *ball)
 			{
 				flag2 = true;
 				D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5 - 2, rand() % 5 - 2, rand() % 5 - 2));
-				ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.5f), accel.y * 0.5f, sin(-angleY) + (accel.z * 0.5f)) * 0.3f, 20);
+				ball_1->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY) + (accel.x * 0.5f), accel.y * 0.5f, sin(-angleY) + (accel.z * 0.5f)) * 0.3f, 40);
 			}
 			if (c > 231)
 			{
@@ -176,6 +189,9 @@ void Player::Draw(BallAdmin *ball)
 			}
 		}
 
+		//-----------------------------------------------------------------------------
+		//	スナイパーライフルの処理
+		//-----------------------------------------------------------------------------
 		static bool flag3 = false;
 		static bool exist3 = false;
 		static int d = 0;
@@ -195,7 +211,7 @@ void Player::Draw(BallAdmin *ball)
 				D3DXVec3Normalize(&accel, &D3DXVECTOR3(rand() % 5 - 2, rand() % 5 - 2, rand() % 5 - 2));
 				if (c % 30 == 0)
 				{
-					ball->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY), accel.y * 0.1f, sin(-angleY)) * 1.2f, 20);
+					ball_1->Set(pos + D3DXVECTOR3(cos(-angleY), 0, sin(-angleY)) * 1.0f, D3DXVECTOR3(cos(-angleY), accel.y * 0.1f, sin(-angleY)) * 1.2f, 20);
 				}
 			}
 			if (c > 360)
@@ -284,4 +300,30 @@ void Player::Draw(BallAdmin *ball)
 	}
 
 	mesh[0].Draw(&laserPointer, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0.5f, 0.5f, 0.5f), texture[0].Get());
+}
+
+void Player::Hit(Player2 &player2)
+{
+	//	自分と相手プレイヤー
+	if (pow(player2.pos.x - pos.x, 2) + pow(player2.pos.z - pos.z, 2) <= pow(0.5 + 0.5, 2)
+		&& pow(player2.pos.x - pos.x, 2) + pow(player2.pos.y - pos.y, 2) <= pow(0.5 + 0.5, 2))
+	{
+		float hitAngle = atan2(player2.pos.z - pos.z, player2.pos.x - pos.x);
+		player2.vec = D3DXVECTOR3(cos(hitAngle), 0, sin(hitAngle)) * 2;
+	}
+	else
+	{
+		player2.vec.x -= 0.1f;
+		player2.vec.z -= 0.1f;
+
+		if (player2.vec.x < 0)
+		{
+			player2.vec.x = 0;
+		}
+		if (player2.vec.z < 0)
+		{
+			player2.vec.z = 0;
+		}
+
+	}
 }

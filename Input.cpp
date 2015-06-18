@@ -257,7 +257,7 @@ namespace vtx
 	bool Gamepad::GetUp(int XINPUT_GAMEPAD_)
 	{
 		if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_)
-			&& (state.Gamepad.wButtons & XINPUT_GAMEPAD_))
+			&& (old.Gamepad.wButtons & XINPUT_GAMEPAD_))
 		{
 			return true;
 		}
@@ -269,7 +269,7 @@ namespace vtx
 	bool Gamepad::GetDown(int XINPUT_GAMEPAD_)
 	{
 		if ((state.Gamepad.wButtons & XINPUT_GAMEPAD_)
-			&& !(state.Gamepad.wButtons & XINPUT_GAMEPAD_))
+			&& !(old.Gamepad.wButtons & XINPUT_GAMEPAD_))
 		{
 			return true;
 		}

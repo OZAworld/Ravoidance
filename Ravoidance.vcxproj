@@ -75,6 +75,7 @@
     <ClCompile Include="2Player.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Bar.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Math.cpp" />
@@ -88,6 +89,7 @@
     <ClInclude Include="2Player.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="Bar.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Player.h" />

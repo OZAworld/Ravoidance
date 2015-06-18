@@ -20,9 +20,9 @@ public:
 
 	~Ball();
 
-	void Update(Player &player, std::vector<Ball> ball, int index);
+	void Update(Player &player, std::vector<Ball> ball, int index, Player2 &player2);
 
-	void Update_B(Player2 &player2, std::vector<Ball> ball, int index);
+	void Update_B(Player2 &player2, std::vector<Ball> ball, int index, Player &player);
 
 	void Draw(vtx::Mesh *ballMesh, vtx::Texture *ballTexture, vtx::Mesh *shadowMesh, vtx::Texture *shadowTexture);
 
@@ -34,7 +34,8 @@ private:
 
 	vtx::Mesh *mesh;
 	vtx::Texture *texture;
-	std::vector<Ball> ball;
+	std::vector<Ball> ball_1;
+	std::vector<Ball> ball_2;
 
 public:
 
@@ -44,8 +45,8 @@ public:
 
 	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 vec, int Num);
 
-	void Draw(Player &player);
+	void Draw(Player &player, Player2 &player2);
 
-	void Draw_B(Player2 &player2);
+	void Draw_B(Player2 &player2, Player &player);
 
 };

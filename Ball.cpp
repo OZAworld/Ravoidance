@@ -5,6 +5,9 @@
 #include "Ball.h"
 using namespace vtx;
 
+int playerCount = 0;
+int playerCount2 = 0;
+
 Ball::Ball()
 {
 	pos = D3DXVECTOR3(0, 0, 0);
@@ -22,10 +25,10 @@ Ball::~Ball()
 
 }
 
-void Ball::Update(Player &player, std::vector<Ball> ball, int index)
+void Ball::Update(Player &player, std::vector<Ball> ball, int index, Player2 &player2)
 {
-	vec *= 0.99f;
-	vec.y -= 0.0005f;
+	vec *= 0.995f;
+	vec.y -= 0.0003f;
 
 	pos += vec;
 
@@ -82,12 +85,24 @@ void Ball::Update(Player &player, std::vector<Ball> ball, int index)
 			vec += D3DXVECTOR3(cos(hitAngle), 0, sin(hitAngle)) * (ball[i].vec.x + ball[i].vec.y + ball[i].vec.z) * 0.3f;
 		}
 	}
+
+	//----------------------------------------------------------
+	//	相手プレイヤーへの当たり判定
+	//----------------------------------------------------------
+	//	球と相手プレイヤー
+	if (pow(pos.x - player2.pos.x, 2) + pow(pos.z - player2.pos.z, 2) <= pow(0.5 + 0.15, 2)
+		&& pow(pos.x - player2.pos.x, 2) + pow(pos.y - player2.pos.y, 2) <= pow(0.5 + 0.15, 2))
+	{
+		float hitAngle = atan2(pos.z - player2.pos.z, pos.x - player2.pos.x);
+		vec = D3DXVECTOR3(cos(hitAngle), 0, sin(hitAngle)) * 0.05f;
+		playerCount2 += 1;
+	}
 }
 
-void Ball::Update_B(Player2 &player2, std::vector<Ball> ball, int index)
+void Ball::Update_B(Player2 &player2, std::vector<Ball> ball, int index, Player &player)
 {
-	vec *= 0.99f;
-	vec.y -= 0.0005f;
+	vec *= 0.9995f;
+	vec.y -= 0.0003f;
 
 	pos += vec;
 
@@ -144,6 +159,19 @@ void Ball::Update_B(Player2 &player2, std::vector<Ball> ball, int index)
 			vec += D3DXVECTOR3(cos(hitAngle), 0, sin(hitAngle)) * (ball[i].vec.x + ball[i].vec.y + ball[i].vec.z) * 0.3f;
 		}
 	}
+	
+	//----------------------------------------------------------
+	//	相手プレイヤーへの当たり判定
+	//----------------------------------------------------------
+	//	球と相手プレイヤー
+	if (pow(pos.x - player.pos.x, 2) + pow(pos.z - player.pos.z, 2) <= pow(0.5 + 0.15, 2)
+		&& pow(pos.x - player.pos.x, 2) + pow(pos.y - player.pos.y, 2) <= pow(0.5 + 0.15, 2))
+	{
+		float hitAngle = atan2(pos.z - player.pos.z, pos.x - player.pos.x);
+		vec = D3DXVECTOR3(cos(hitAngle), 0, sin(hitAngle)) * 0.05f;
+		playerCount += 1;
+	}
+
 }
 
 void Ball::Draw(Mesh *ballMesh, Texture *ballTexture, Mesh *shadowMesh, Texture *shadowTexture)
@@ -157,10 +185,12 @@ BallAdmin::BallAdmin()
 	mesh = new Mesh[2];
 	mesh[0].Load(_T("Mesh/Ball.x"));
 	mesh[1].Load(_T("Mesh/Shadow.x"));
-	texture = new Texture[2];
+	texture = new Texture[3];
 	texture[0].Load(_T("Texture/Ball.jpg"));
 	texture[1].Load(_T("Texture/Shadow.png"));
-	ball.clear();
+	texture[2].Load(_T("Texture/Ball_2.jpg"));
+	ball_1.clear();
+	ball_2.clear();
 }
 
 BallAdmin::~BallAdmin()
@@ -171,25 +201,30 @@ BallAdmin::~BallAdmin()
 
 void BallAdmin::Set(D3DXVECTOR3 pos, D3DXVECTOR3 vec, int Num)
 {
-	ball.push_back(Ball(pos, vec));
-	if (ball.size() > Num)
-		ball.erase(ball.begin() + 0);
+	ball_1.push_back(Ball(pos, vec));
+	if (ball_1.size() > Num)
+		ball_1.erase(ball_1.begin() + 0);
+
+	ball_2.push_back(Ball(pos, vec));
+	if (ball_2.size() > Num)
+		ball_2.erase(ball_2.begin() + 0);
+
 }
 
-void BallAdmin::Draw(Player &player)
+void BallAdmin::Draw(Player &player, Player2 &player2)
 {
-	for (int i = 0; i < ball.size(); i++)
+	for (int i = 0; i < ball_1.size(); i++)
 	{
-		ball[i].Update(player, ball, i);
-		ball[i].Draw(&mesh[0], &texture[0], &mesh[1], &texture[1]);
+		ball_1[i].Update(player, ball_1, i, player2);
+		ball_1[i].Draw(&mesh[0], &texture[0], &mesh[1], &texture[1]);
 	}
 }
 
-void BallAdmin::Draw_B(Player2 &player2)
+void BallAdmin::Draw_B(Player2 &player2, Player &player)
 {
-	for (int i = 0; i < ball.size(); i++)
+	for (int i = 0; i < ball_2.size(); i++)
 	{
-		ball[i].Update_B(player2, ball, i);
-		ball[i].Draw(&mesh[0], &texture[0], &mesh[1], &texture[1]);
+		ball_2[i].Update_B(player2, ball_2, i, player);
+		ball_2[i].Draw(&mesh[0], &texture[2], &mesh[1], &texture[1]);
 	}
 }

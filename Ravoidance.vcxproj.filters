@@ -44,6 +44,9 @@
     <ClCompile Include="2Player.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Bar.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -74,6 +77,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="2Player.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Bar.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
