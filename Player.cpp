@@ -309,12 +309,12 @@ void Player::Hit(Player2 &player2)
 		&& pow(player2.pos.x - pos.x, 2) + pow(player2.pos.y - pos.y, 2) <= pow(0.5 + 0.5, 2))
 	{
 		float hitAngle = atan2(player2.pos.z - pos.z, player2.pos.x - pos.x);
-		player2.vec = D3DXVECTOR3(cos(hitAngle), 0, sin(hitAngle)) * 2;
+		player2.vec = D3DXVECTOR3(cos(hitAngle), 0, sin(hitAngle)) * 0.1f;
 	}
 	else
 	{
-		player2.vec.x -= 0.1f;
-		player2.vec.z -= 0.1f;
+		player2.vec.x -= 0.01f;
+		player2.vec.z -= 0.01f;
 
 		if (player2.vec.x < 0)
 		{

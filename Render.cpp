@@ -75,6 +75,12 @@ namespace vtx
 		d3d->SetRenderState(D3DRS_POINTSCALE_A, FloatToDWORD(0.0f));
 		d3d->SetRenderState(D3DRS_POINTSCALE_B, FloatToDWORD(0.0f));
 		d3d->SetRenderState(D3DRS_POINTSCALE_C, FloatToDWORD(1.0f));
+		d3d->SetRenderState(D3DRS_FOGENABLE, true);
+		d3d->SetRenderState(D3DRS_FOGCOLOR, 0x80000000);
+		d3d->SetRenderState(D3DRS_FOGSTART, FloatToDWORD(6.0f));
+		d3d->SetRenderState(D3DRS_FOGEND, FloatToDWORD(48.0f));
+		d3d->SetRenderState(D3DRS_FOGVERTEXMODE, D3DFOG_LINEAR);
+
 
 		D3DLIGHT9 light;
 		ZeroMemory(&light, sizeof(D3DLIGHT9));

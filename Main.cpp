@@ -7,7 +7,8 @@
 using std::unique_ptr;
 using namespace vtx;
 
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+//int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+int main()
 {
 	unique_ptr<Lib> lib(new Lib(_T("Ravoidance"), 1280, 720, false));
 	float angle = -70;

@@ -101,7 +101,7 @@ void Ball::Update(Player &player, std::vector<Ball> ball, int index, Player2 &pl
 
 void Ball::Update_B(Player2 &player2, std::vector<Ball> ball, int index, Player &player)
 {
-	vec *= 0.9995f;
+	vec *= 0.995f;
 	vec.y -= 0.0003f;
 
 	pos += vec;
