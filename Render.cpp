@@ -7,7 +7,7 @@ Naoki Nakagawa
 */
 #include "vtx.h"
 #define SafeRelease(p) if (p) { p->Release(); p = nullptr; }
-DWORD FloatToDWORD(float v) { return *((DWORD *)&v); }
+inline DWORD FloatToDWORD(float v) { return *((DWORD *)&v); }
 
 namespace vtx
 {

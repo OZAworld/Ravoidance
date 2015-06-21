@@ -7,6 +7,9 @@ class vtx::Texture;
 
 class Bar
 {
+	//----------------------------------------------
+	//	バーの表示
+	//----------------------------------------------
 	D3DXVECTOR3 pos_1;
 	D3DXVECTOR3 scale_1;
 	D3DXVECTOR3 pos_2;
@@ -15,9 +18,18 @@ class Bar
 	D3DXVECTOR3 scale_3;
 	float timer;
 
+
+	//----------------------------------------------
+	//	時間の表示
+	//----------------------------------------------
+	D3DXVECTOR3 secPos;
+	D3DXVECTOR3 secScale;
+	D3DXVECTOR3 secRot;
 private:
 	vtx::Mesh *mesh;
 	vtx::Texture *texture;
+	vtx::Mesh *sec;
+	vtx::Texture *secTex;
 
 public:
 	Bar();

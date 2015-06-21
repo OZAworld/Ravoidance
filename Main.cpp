@@ -12,7 +12,7 @@ int main()
 {
 	unique_ptr<Lib> lib(new Lib(_T("Ravoidance"), 1280, 720, false));
 	float angle = -70;
-	unique_ptr<Camera> camera(new Camera(D3DXVECTOR3(0, cos(D3DXToRadian(angle)) * 22 - 2, sin(D3DXToRadian(angle)) * 22), D3DXVECTOR3(D3DXToRadian(angle + 90), 0, 0)));
+	unique_ptr<Camera> camera(new Camera(D3DXVECTOR3(0, cos(D3DXToRadian(angle)) * 22 - 1, sin(D3DXToRadian(angle)) * 22), D3DXVECTOR3(D3DXToRadian(angle + 90), 0, 0)));
 	unique_ptr<Stage> stage(new Stage());
 	unique_ptr<Player> player(new Player(D3DXVECTOR3(-5, -4.5, 0), 0));
 	player->texture[0].Load(_T("Texture/Red.png"));
