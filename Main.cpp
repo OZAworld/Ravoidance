@@ -7,6 +7,13 @@
 using std::unique_ptr;
 using namespace vtx;
 
+enum _GameState
+{
+	GAME_MAIN,
+	GAME_RESULT,
+};
+_GameState gs;
+
 //int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 int main()
 {
@@ -24,26 +31,61 @@ int main()
 	unique_ptr<BallAdmin> ball_2(new BallAdmin());
 	unique_ptr<Bar> bar(new Bar());
 
+	gs = GAME_MAIN;
+	int c = 0;
+
 	while (app->wnd->MessageLoop())
 	{
-		render->Start();
-		render->Clear(0xff000000);
+		switch (gs)
+		{
+			case GAME_MAIN:
+				render->Start();
+				render->Clear(0xff000000);
 
-		stage->Draw();
+				extern bool GameSet;
+				if (GameSet == true)
+				{
+					c++;
+					if (c > 100)
+						gs = GAME_RESULT;
+				}
 
-		player->Draw(ball_1.get());
+				stage->Draw();
 
-		player2->Draw(ball_2.get());
-		player->Hit(*player2);
-		player2->Hit(*player);
+				player->Draw(ball_1.get());
 
-		ball_1->Draw(*player, *player2);
+				player2->Draw(ball_2.get());
+				player->Hit(*player2);
+				player2->Hit(*player);
 
-		ball_2->Draw_B(*player2, *player);
+				ball_1->Draw(*player, *player2);
 
-		bar->Draw();
+				ball_2->Draw_B(*player2, *player);
 
-		render->End();
+				bar->Draw();
+
+				render->End();
+
+				break;
+				
+			case GAME_RESULT:
+				render->Start();
+
+				extern int playerCount;
+				extern int playerCount2;
+				
+				if (playerCount > playerCount2)
+				{
+					render->Clear(0xff7fffd4);
+				}
+				else
+				{
+					render->Clear(0xffff6347);
+				}
+
+				render->End();
+				break;
+		}
 	}
 
 	return 0;

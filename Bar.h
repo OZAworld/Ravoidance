@@ -17,7 +17,7 @@ class Bar
 	D3DXVECTOR3 pos_3;
 	D3DXVECTOR3 scale_3;
 	float timer;
-
+	int startCount;
 
 	//----------------------------------------------
 	//	ŽžŠÔ‚Ì•\Ž¦

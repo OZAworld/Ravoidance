@@ -36,7 +36,10 @@ Player2::~Player2()
 
 void Player2::Draw(BallAdmin *ball_2)
 {
-	if (input->gamepad->Enable(2))
+	extern bool GameStart;
+	extern bool GameSet;
+
+	if (input->gamepad->Enable(2) && GameStart == true && GameSet == false)
 	{
 		pos.x += floor(input->gamepad->LS().x * 2) * 0.1f + vec.x;
 		pos.z += floor(input->gamepad->LS().y * 2) * 0.1f + vec.z;
@@ -118,15 +121,15 @@ void Player2::Draw(BallAdmin *ball_2)
 	}
 	else
 	{
-		if (input->key->Get(DIK_W))
+		if (input->key->Get(DIK_W) && GameStart == true && GameSet == false)
 			pos.z += 0.1f;
-		if (input->key->Get(DIK_A))
+		if (input->key->Get(DIK_A) && GameStart == true && GameSet == false)
 			pos.x -= 0.1f;
-		if (input->key->Get(DIK_S))
+		if (input->key->Get(DIK_S) && GameStart == true && GameSet == false)
 			pos.z -= 0.1f;
-		if (input->key->Get(DIK_D))
+		if (input->key->Get(DIK_D) && GameStart == true && GameSet == false)
 			pos.x += 0.1f;
-		if (input->key->Get(DIK_SPACE))
+		if (input->key->Get(DIK_SPACE) && GameStart == true && GameSet == false)
 			vy = 0.1f;
 
 		angleY = atan2(input->mouse->GetY() - app->wnd->GetRectClient().bottom / 2, input->mouse->GetX() - app->wnd->GetRectClient().right / 2);

@@ -7,6 +7,8 @@ using namespace vtx;
 
 int playerCount = 0;
 int playerCount2 = 0;
+bool playerFlag = false;
+bool playerFlag2 = false;
 
 Ball::Ball()
 {
@@ -96,6 +98,7 @@ void Ball::Update(Player &player, std::vector<Ball> ball, int index, Player2 &pl
 		float hitAngle = atan2(pos.z - player2.pos.z, pos.x - player2.pos.x);
 		vec = D3DXVECTOR3(cos(hitAngle), 0, sin(hitAngle)) * 0.05f;
 		playerCount2 += 1;
+		playerFlag2 = true;
 	}
 }
 
@@ -170,6 +173,7 @@ void Ball::Update_B(Player2 &player2, std::vector<Ball> ball, int index, Player 
 		float hitAngle = atan2(pos.z - player.pos.z, pos.x - player.pos.x);
 		vec = D3DXVECTOR3(cos(hitAngle), 0, sin(hitAngle)) * 0.05f;
 		playerCount += 1;
+		playerFlag = true;
 	}
 
 }

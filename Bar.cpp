@@ -6,18 +6,21 @@
 #include "Bar.h"
 using namespace vtx;
 
+bool GameStart;			//	ゲームが始まったかどうか
+bool GameSet;			//	ゲームが終わったかどうか
 
 Bar::Bar()
 {
-	mesh = new Mesh[2];
+	mesh = new Mesh[3];
 	mesh[0].Load(_T("Mesh/HpBar.x"));
 	mesh[1].Load(_T("Mesh/timeBar.x"));
+	mesh[2].Load(_T("Mesh/barFrame.x"));
 	texture = new Texture[3];
 	texture[0].Load(_T("Texture/Red.png"));
 	texture[1].Load(_T("Texture/Blue.png"));
 	texture[2].Load(_T("Texture/Green.png"));
 
-	sec = new Mesh[9];
+	sec = new Mesh[11];
 	sec[0].Load(_T("Mesh/10sec.x"));
 	sec[1].Load(_T("Mesh/20sec.x"));
 	sec[2].Load(_T("Mesh/30sec.x"));
@@ -27,11 +30,14 @@ Bar::Bar()
 	sec[6].Load(_T("Mesh/3sec.x"));
 	sec[7].Load(_T("Mesh/4sec.x"));
 	sec[8].Load(_T("Mesh/5sec.x"));
-	secTex = new Texture[4];
+	sec[9].Load(_T("Mesh/Ready.x"));
+	sec[10].Load(_T("Mesh/Go.x"));
+	secTex = new Texture[5];
 	secTex[0].Load(_T("Texture/Green.png"));
 	secTex[1].Load(_T("Texture/Yellow.png"));
 	secTex[2].Load(_T("Texture/Red.png"));
 	secTex[3].Load(_T("Texture/Blue.png"));
+	secTex[4].Load(_T("Texture/Shadow.png"));
 
 	pos_1 = D3DXVECTOR3(-7.5, -3, -9);
 	scale_1 = D3DXVECTOR3(0.8, 8, 1);
@@ -39,12 +45,16 @@ Bar::Bar()
 	pos_2 = D3DXVECTOR3(7.5, -3, -9);
 	scale_2 = D3DXVECTOR3(0.8, 8, 1);
 
-	pos_3 = D3DXVECTOR3(0, 6.7, -11);
+	pos_3 = D3DXVECTOR3(0, 6.5, -11);
 	scale_3 = D3DXVECTOR3(8, 0.5, 0.5);
 
 	secPos = D3DXVECTOR3(0, 6.3, -12);
 	secScale = D3DXVECTOR3(0.8, 0.8, 0.8);
 	secRot = D3DXVECTOR3(D3DXToRadian(0), D3DXToRadian(180), 0);
+
+	GameStart = false;
+	GameSet = false;
+	startCount = 0;
 }
 
 Bar::~Bar()
@@ -72,18 +82,39 @@ void Bar::Draw()
 
 	mesh[0].Draw(&pos_1, &D3DXVECTOR3(0, D3DXToRadian(-15), 0), &scale_1, texture[0].Get());
 	mesh[0].Draw(&pos_2, &D3DXVECTOR3(0, D3DXToRadian(15), 0), &scale_2, texture[1].Get());
+	startCount++;
+	if (GameStart == false && startCount < 100)
+	{
+		sec[9].Draw(&D3DXVECTOR3(0, 6.2, -19.6), &D3DXVECTOR3(D3DXToRadian(-35), D3DXToRadian(180), 0), &D3DXVECTOR3(0.2, 0.2, 0.2), secTex[3].Get());
+	}
 
-	timer += 0.00000375f;
-	scale_3.x -= timer;
-	std::cout << "sec." << scale_3.x << std::endl;
-	mesh[1].Draw(&pos_3, &D3DXVECTOR3(D3DXToRadian(-40), 0, 0), &scale_3, texture[2].Get());
+	if (startCount > 100 && startCount < 130)
+	{
+		sec[10].Draw(&D3DXVECTOR3(0, 6.2, -19.6), &D3DXVECTOR3(D3DXToRadian(-35), D3DXToRadian(180), 0), &D3DXVECTOR3(0.2, 0.2, 0.2), secTex[3].Get());
+	}
+	if (startCount > 130)
+	{
+		startCount = 130;
+		GameStart = true;
+	}
 
-	secRot.y -= 0.03f;
-	
+	if (GameStart == true)
+	{
+		timer += 0.00000375f;
+		scale_3.x -= timer;
+		secRot.y -= 0.09f;
+	}
+	if (scale_3.x > 0)
+	{
+		mesh[1].Draw(&pos_3, &D3DXVECTOR3(D3DXToRadian(-40), 0, 0), &scale_3, texture[2].Get());
+	}
+	mesh[2].Draw(&D3DXVECTOR3(0, 6.5, -10), &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(440, 39, 2), secTex[4].Get());
+	mesh[2].Draw(&D3DXVECTOR3(0, 6.5, -10), &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(450, 45, 1), nullptr);
+
 	//	30
 	if (scale_3.x > 7.2)
 		sec[2].Draw(&secPos, &secRot, &secScale, secTex[0].Get());
-	
+
 	//	20
 	if (scale_3.x > 4.8 && scale_3.x < 7.2)
 		sec[1].Draw(&secPos, &secRot, &secScale, secTex[1].Get());
@@ -135,13 +166,15 @@ void Bar::Draw()
 
 	//	GameSet
 	if (scale_3.x <= 0)
-		sec[3].Draw(&D3DXVECTOR3(0, 6.2, -19.6), &D3DXVECTOR3(D3DXToRadian(-5), D3DXToRadian(180), 0), &D3DXVECTOR3(1, 1, 1), secTex[3].Get());
+		sec[3].Draw(&D3DXVECTOR3(0, 6.2, -19.6), &D3DXVECTOR3(D3DXToRadian(-35), D3DXToRadian(180), 0), &D3DXVECTOR3(0.2, 0.2, 0.2), secTex[3].Get());
 
 
 	//	終了
 	if (scale_3.x < 0)
 	{
 		scale_3.x = 0;
+		GameSet = true;
 	}
+
 }
 

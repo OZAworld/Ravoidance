@@ -26,6 +26,7 @@ public:
 
 	void Draw(vtx::Mesh *ballMesh, vtx::Texture *ballTexture, vtx::Mesh *shadowMesh, vtx::Texture *shadowTexture);
 
+
 };
 
 class BallAdmin
